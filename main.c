@@ -3,6 +3,7 @@
 #define MAX_CITIES 30
 
 char cities[MAX_CITIES][50];
+float dist[MAX_CITIES][MAX_CITIES];
 int cityCount = 0;
 
 
@@ -85,10 +86,33 @@ void listCities() {
 }
 
 
-
 void editDistance() {
-    printf("Distance edited!\n");
+    if (cityCount < 2) {
+        printf("Add at least 2 cities first!\n");
+        return;
+    }
+    listCities();
+    int i, j;
+    float d;
+    printf("Enter source city index: ");
+    scanf("%d", &i);
+    printf("Enter destination city index: ");
+    scanf("%d", &j);
+
+    if (i == j) {
+        printf("Distance to same city = 0\n");
+        dist[i][j] = 0;
+        return;
+    }
+
+    printf("Enter distance between %s and %s (km): ", cities[i], cities[j]);
+    scanf("%f", &d);
+    dist[i][j] = dist[j][i] = d;
+    printf("Distance updated!\n");
 }
+
+
+
 
 void showDistanceTable() {
     printf("Distance table shown\n");
