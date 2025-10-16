@@ -113,10 +113,26 @@ void editDistance() {
 
 
 
-
 void showDistanceTable() {
-    printf("Distance table shown\n");
+    if (cityCount == 0) {
+        printf("No cities to show!\n");
+        return;
+    }
+    printf("\nDistance Table (km):\n");
+    printf("%-10s", "");
+    for (int i = 0; i < cityCount; i++)
+        printf("%-10s", cities[i]);
+    printf("\n");
+
+    for (int i = 0; i < cityCount; i++) {
+        printf("%-10s", cities[i]);
+        for (int j = 0; j < cityCount; j++) {
+            printf("%-10.1f", dist[i][j]);
+        }
+        printf("\n");
+    }
 }
+
 
 void showVehicles() {
     printf("Vehicles displayed\n");
