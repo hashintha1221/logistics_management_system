@@ -77,11 +77,14 @@ void addCity() {
 
 
 
-
-
 void listCities() {
-    printf("List of cities\n");
+    printf("\nCities:\n");
+    for (int i = 0; i < cityCount; i++) {
+        printf("%d. %s\n", i, cities[i]);
+    }
 }
+
+
 
 void editDistance() {
     printf("Distance edited!\n");
