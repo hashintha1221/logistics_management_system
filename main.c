@@ -158,8 +158,17 @@ void showDistanceTable() {
 
 void showVehicles() {
     printf("\nAvailable Vehicle\n");
-
+    for (int i = 0; i < 3; i++) {
+        printf("%d. %s - Capacity: %dkg | Rate: %.2f LKR/km | Speed: %.0f km/h | Efficiency: %.1f km/l\n",
+            i + 1,
+            vehicles[i].name,
+            vehicles[i].capacity,
+            vehicles[i].rate,
+            vehicles[i].speed,
+            vehicles[i].efficiency);
+    }
 }
+
 
 void addDelivery() {
     printf("Delivery added!\n");
