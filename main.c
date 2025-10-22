@@ -1,10 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_CITIES 30
 
+#define MAX_CITIES 30
+#define MAX_DELIVERIES 50
+#define FUEL_PRICE 310.0
+
+//Vehicle Details
+typedef struct {
+    char name[10];
+    int capacity;
+    float rate;
+    float speed;
+    float efficiency;
+}  Vehicle;
+
+//Global Arrays
 char cities[MAX_CITIES][50];
 float dist[MAX_CITIES][MAX_CITIES];
 int cityCount = 0;
+
+Vehicle vehicles[3] =
+{
+    {"Van", 1000, 30, 60, 12},
+    {"Truck", 5000, 40, 50, 6},
+    {"Lorry", 10000, 80, 45, 4}
+};
+
+
 
 
 //function declarations
@@ -135,7 +157,8 @@ void showDistanceTable() {
 
 
 void showVehicles() {
-    printf("Vehicles displayed\n");
+    printf("\nAvailable Vehicle\n");
+
 }
 
 void addDelivery() {
