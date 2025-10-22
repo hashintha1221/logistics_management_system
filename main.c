@@ -6,13 +6,30 @@
 #define FUEL_PRICE 310.0
 
 //Vehicle Details
-typedef struct {
+typedef struct
+{
     char name[10];
     int capacity;
     float rate;
     float speed;
     float efficiency;
 }  Vehicle;
+
+//Delivery record structure
+typedef struct
+{
+    int src, dest;           // city indexes
+    float weight;            // delivery weight
+    int vehicleType;         // vehicle index (1,2,3)
+    float distance;          // distance between cities
+    float cost;              // base transport cost
+    float fuelUsed;          // liters of fuel
+    float fuelCost;          // cost of fuel
+    float totalCost;         // cost + fuel
+    float profit;            // company profit
+    float customerCharge;    // final charge to customer
+    float time;              // estimated travel time (hours)
+} Delivery;
 
 //Global Arrays
 char cities[MAX_CITIES][50];
@@ -26,6 +43,8 @@ Vehicle vehicles[3] =
     {"Lorry", 10000, 80, 45, 4}
 };
 
+ Delivery deliveries[MAX_DELIVERIES];
+ int deliveryCount = 0;
 
 
 
