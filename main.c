@@ -190,8 +190,73 @@ void showVehicles() {
 
 
 void addDelivery() {
-    printf("Delivery added!\n");
+
+    if (cityCount < 2) {
+        printf("Add cities and distances first!\n");
+        return;
+    }
+
+    Delivery d;
+    listCities();
+    printf("Enter source index: ");
+    scanf("%d", &d.src);
+    printf("Enter destination index: ");
+    scanf("%d", &d.dest);
+
+    if (d.src == d.dest) {
+        printf("Source and destination must be different!\n");
+        return;
+    }
+
+    printf("Enter weight (kg): ");
+    scanf("%f", &d.weight);
+
+    showVehicles();
+    printf("Select vehicle (1=Van, 2=Truck, 3=Lorry): ");
+    scanf("%d", &d.vehicleType);
+
+    // Vehicle selection
+    Vehicle v = vehicles[d.vehicleType - 1];
+
+    // Check capacity
+    if (d.weight > v.capacity) {
+        printf("Weight exceeds vehicle capacity!\n");
+        return;
+    }
+
+    // Get distance
+    d.distance = dist[d.src][d.dest];
+    if (d.distance <= 0) {
+        printf("Distance not set between selected cities!\n");
+        return;
+    }
+
+    // Calculation
+    d.cost = d.distance * v.rate * (1 + d.weight / 10000.0);
+    d.fuelUsed = d.distance / v.efficiency;
+    d.fuelCost = d.fuelUsed * FUEL_PRICE;
+    d.totalCost = d.cost + d.fuelCost;
+    d.profit = d.cost * 0.25;
+    d.customerCharge = d.totalCost + d.profit;
+    d.time = d.distance / v.speed;
+
+    // Save delivery
+    deliveries[deliveryCount++] = d;
+
+    //Summary output
+    printf("\n--- DELIVERY SUMMARY ---\n");
+    printf("From: %s\nTo: %s\n", cities[d.src], cities[d.dest]);
+    printf("Vehicle: %s\n", v.name);
+    printf("Weight: %.1f kg\nDistance: %.1f km\n", d.weight, d.distance);
+    printf("Transport Cost: %.2f LKR\n", d.cost);
+    printf("Fuel Used: %.2f L\nFuel Cost: %.2f LKR\n", d.fuelUsed, d.fuelCost);
+    printf("Total Operational Cost: %.2f LKR\n", d.totalCost);
+    printf("Profit: %.2f LKR\nCustomer Charge: %.2f LKR\n", d.profit, d.customerCharge);
+    printf("Estimated Time: %.2f hours\n", d.time);
+    printf("==========================\n");
 }
+
+
 
 void showDeliveries() {
     printf("All deliveries shown\n");
