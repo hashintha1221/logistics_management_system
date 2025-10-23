@@ -278,6 +278,24 @@ void showDeliveries() {
 
 
 void showReport() {
-    printf("Report displayed\n");
+
+if (deliveryCount == 0) {
+        printf("No deliveries to report!\n");
+        return;
+    }
+
+  float totalDist = 0, totalProfit = 0, totalTime = 0;
+  for (int i = 0; i < deliveryCount; i++) {
+    totalDist += deliveries[i].distance;
+    totalProfit += deliveries[i].profit;
+    totalTime += deliveries[i].time;
+    }
+
+    printf("\n==== PERFORMANCE REPORT ====\n");
+    printf("Total Deliveries: %d\n", deliveryCount);
+    printf("Total Distance: %.1f km\n", totalDist);
+    printf("Average Time: %.2f hours\n", totalTime / deliveryCount);
+    printf("Total Profit: %.2f LKR\n", totalProfit);
+    printf("============================\n");
 }
 
