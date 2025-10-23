@@ -424,3 +424,26 @@ if (deliveryCount == 0) {
     printf("============================\n");
 }
 
+//-------File Handling------
+
+void saveDeliveries() {
+    FILE *fp = fopen("deliveries.txt", "w");
+    if (fp == NULL) {
+        printf("Error saving deliveries!\n");
+        return;
+    }
+
+    for (int i = 0; i < deliveryCount; i++) {
+        Delivery d = deliveries[i];
+        fprintf(fp, "%d %d %f %d %f %f %f %f %f %f %f\n",
+                d.src, d.dest, d.weight, d.vehicleType, d.distance,
+                d.cost, d.fuelUsed, d.fuelCost, d.totalCost, d.profit,
+                d.customerCharge);
+    }
+
+    fclose(fp);
+    printf("Deliveries saved to file successfully!\n");
+}
+
+
+
