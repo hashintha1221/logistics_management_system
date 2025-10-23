@@ -259,8 +259,23 @@ void addDelivery() {
 
 
 void showDeliveries() {
-    printf("All deliveries shown\n");
+    if (deliveryCount == 0) {
+    printf("No deliveries yet!\n");
+    return;
+    }
+
+  printf("\n==== ALL DELIVERIES ====\n");
+    for (int i = 0; i < deliveryCount; i++) {
+      Delivery d = deliveries[i];
+      printf("\nDelivery #%d\n", i + 1);
+      printf("From: %s -> %s\n", cities[d.src], cities[d.dest]);
+      printf("Vehicle: %s\n", vehicles[d.vehicleType - 1].name);
+      printf("Weight: %.1f kg | Distance: %.1f km\n", d.weight, d.distance);
+      printf("Charge: %.2f LKR | Profit: %.2f LKR | Time: %.2f hrs\n", d.customerCharge, d.profit, d.time);
+    }
+    printf("========================\n");
 }
+
 
 void showReport() {
     printf("Report displayed\n");
