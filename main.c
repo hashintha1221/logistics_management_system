@@ -215,6 +215,29 @@ void addDelivery() {
     printf("Select vehicle (1=Van, 2=Truck, 3=Lorry): ");
     scanf("%d", &d.vehicleType);
 
+
+    // Add this inside addDelivery() before using Vehicle v
+if (d.vehicleType < 1 || d.vehicleType > 3) {
+    printf("Invalid vehicle type! Please select 1, 2, or 3.\n");
+    return;
+}
+
+if (d.weight <= 0) {
+    printf("Weight must be greater than 0!\n");
+    return;
+}
+
+if (d.src < 0 || d.src >= cityCount || d.dest < 0 || d.dest >= cityCount) {
+    printf("Invalid city index!\n");
+    return;
+}
+
+if (dist[d.src][d.dest] <= 0) {
+    printf("No valid distance between selected cities!\n");
+    return;
+}
+
+
     // Vehicle selection
     Vehicle v = vehicles[d.vehicleType - 1];
 
