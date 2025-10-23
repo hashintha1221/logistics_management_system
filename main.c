@@ -58,23 +58,29 @@ void addDelivery();
 void showDeliveries();
 void showReport();
 
+void renameCity();
+void removeCity();
+void manageCities();
+
+
 int main()
 {
     int choice;
     while (1) {
         printf("\n==== LOGISTICS MANAGEMENT SYSTEM ====\n");
-        printf("1. Add City\n");
+        printf("1. manegecities\n");
         printf("2. Edit Distance\n");
         printf("3. Show Distance Table\n");
         printf("4. Add Delivery\n");
         printf("5. Show Deliveries\n");
         printf("6. Show Report\n");
         printf("0. Exit\n");
+        printf("========================================\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1: addCity();
+            case 1: manageCities();
                   break;
             case 2: editDistance();
                   break;
@@ -96,6 +102,102 @@ int main()
 }
 
    //city function
+
+   void manageCities() {
+    int ch;
+    while (1) {
+        printf("\n=== CITY MANAGEMENT ===\n");
+        printf("1. Add City\n");
+        printf("2. Rename City\n");
+        printf("3. Remove City\n");
+        printf("4. List Cities\n");
+        printf("0. Back to Main Menu\n");
+        printf("Enter choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                addCity();
+             break;
+            case 2:
+                 renameCity();
+                  break;
+            case 3:
+                 removeCity();
+                  break;
+            case 4:
+                 listCities();
+                  break;
+            case 0:
+                return;
+            default:
+                 printf("Invalid choice!\n");
+        }
+    }
+}
+
+void renameCity() {
+    if (cityCount == 0) {
+        printf("No cities available to rename!\n");
+        return;
+    }
+
+    listCities();
+    int index;
+    printf("Enter city index to rename: ");
+    scanf("%d", &index);
+
+    if (index < 0 || index >= cityCount) {
+        printf("Invalid city index!\n");
+        return;
+    }
+
+    char newName[50];
+    printf("Enter new name for %s: ", cities[index]);
+    scanf("%s", newName);
+
+    // Check for duplicates
+    for (int i = 0; i < cityCount; i++) {
+        if (strcmp(cities[i], newName) == 0) {
+            printf("City name already exists!\n");
+            return;
+        }
+    }
+
+    strcpy(cities[index], newName);
+    printf("City renamed successfully!\n");
+}
+
+void removeCity() {
+    if (cityCount == 0) {
+        printf("No cities available to remove!\n");
+        return;
+    }
+
+    listCities();
+    int index;
+    printf("Enter city index to remove: ");
+    scanf("%d", &index);
+
+    if (index < 0 || index >= cityCount) {
+        printf("Invalid city index!\n");
+        return;
+    }
+
+    // Shift cities and distance table
+    for (int i = index; i < cityCount - 1; i++) {
+        strcpy(cities[i], cities[i + 1]);
+        for (int j = 0; j < cityCount; j++) {
+            dist[i][j] = dist[i + 1][j];
+            dist[j][i] = dist[j][i + 1];
+        }
+    }
+    cityCount--;
+    printf("City removed successfully!\n");
+}
+
+
+
 void addCity() {
     if (cityCount >= MAX_CITIES) {
         printf("City limit reached!\n");
