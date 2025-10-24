@@ -5,6 +5,8 @@
 #define MAX_DELIVERIES 50
 #define FUEL_PRICE 310.0
 
+#define INF 1e9
+
 //Vehicle Details
 typedef struct
 {
@@ -65,6 +67,9 @@ void manageCities();
 void saveDeliveries();
 void loadDeliveries();
 
+void findLeastCostRoute();
+
+
 int main()
 {
     int choice;
@@ -78,6 +83,7 @@ int main()
         printf("6. Show Report\n");
         printf("7. Save Deliveries\n");
         printf("8. Load Deliveries\n");
+        printf("9. Find Least-Cost Route\n");
         printf("0. Exit\n");
         printf("========================================\n");
         printf("Enter choice: ");
@@ -97,8 +103,10 @@ int main()
             case 6: showReport();
                   break;
                   case 7: saveDeliveries();
-                   break;
+                  break;
             case 8: loadDeliveries();
+                  break;
+            case 9: findLeastCostRoute();
                    break;
             case 0:
                  return 0;
@@ -480,5 +488,77 @@ void loadDeliveries() {
     printf("Loaded %d deliveries from file.\n", deliveryCount);
 }
 
+
+
+void findLeastCostRoute() {
+    if (cityCount < 2) {
+        printf("Add at least 2 cities first!\n");
+        return;
+    }
+
+    int src, dest;
+    listCities();
+    printf("Enter source city index: ");
+    scanf("%d", &src);
+    printf("Enter destination city index: ");
+    scanf("%d", &dest);
+
+    if (src == dest) {
+        printf("Source and destination must be different!\n");
+        return;
+    }
+
+    float cost[MAX_CITIES];
+    int visited[MAX_CITIES], parent[MAX_CITIES];
+
+    // Initialize arrays
+    for (int i = 0; i < cityCount; i++) {
+        cost[i] = INF;
+        visited[i] = 0;
+        parent[i] = -1;
+    }
+
+    cost[src] = 0;
+
+    // Dijkstra algorithm
+    for (int count = 0; count < cityCount - 1; count++) {
+        int u = -1;
+        float minCost = INF;
+
+        for (int i = 0; i < cityCount; i++)
+            if (!visited[i] && cost[i] < minCost) {
+                minCost = cost[i];
+                u = i;
+            }
+
+        if (u == -1) break;
+        visited[u] = 1;
+
+        for (int v = 0; v < cityCount; v++) {
+            if (!visited[v] && dist[u][v] > 0 &&
+                cost[u] + dist[u][v] < cost[v]) {
+                cost[v] = cost[u] + dist[u][v];
+                parent[v] = u;
+            }
+        }
+    }
+
+    if (cost[dest] == INF) {
+        printf("No route found between %s and %s.\n", cities[src], cities[dest]);
+        return;
+    }
+
+    // Print shortest path
+    printf("\nLeast-Cost Route from %s to %s:\n", cities[src], cities[dest]);
+    int path[MAX_CITIES], count = 0;
+    for (int v = dest; v != -1; v = parent[v])
+        path[count++] = v;
+
+    for (int i = count - 1; i >= 0; i--) {
+        printf("%s", cities[path[i]]);
+        if (i > 0) printf(" -> ");
+    }
+    printf("\nTotal Distance: %.1f km\n", cost[dest]);
+}
 
 
