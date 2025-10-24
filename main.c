@@ -62,6 +62,8 @@ void renameCity();
 void removeCity();
 void manageCities();
 
+void saveDeliveries();
+void loadDeliveries();
 
 int main()
 {
@@ -74,6 +76,8 @@ int main()
         printf("4. Add Delivery\n");
         printf("5. Show Deliveries\n");
         printf("6. Show Report\n");
+        printf("7. Save Deliveries\n");
+        printf("8. Load Deliveries\n");
         printf("0. Exit\n");
         printf("========================================\n");
         printf("Enter choice: ");
@@ -92,6 +96,10 @@ int main()
                   break;
             case 6: showReport();
                   break;
+                  case 7: saveDeliveries();
+                   break;
+            case 8: loadDeliveries();
+                   break;
             case 0:
                  return 0;
             default:
