@@ -445,5 +445,32 @@ void saveDeliveries() {
     printf("Deliveries saved to file successfully!\n");
 }
 
+void loadDeliveries() {
+    FILE *fp = fopen("deliveries.txt", "r");
+    if (fp == NULL) {
+        printf("No previous delivery data found.\n");
+        return;
+    }
+
+    deliveryCount = 0;
+    while (fscanf(fp, "%d %d %f %d %f %f %f %f %f %f %f",
+                  &deliveries[deliveryCount].src,
+                  &deliveries[deliveryCount].dest,
+                  &deliveries[deliveryCount].weight,
+                  &deliveries[deliveryCount].vehicleType,
+                  &deliveries[deliveryCount].distance,
+                  &deliveries[deliveryCount].cost,
+                  &deliveries[deliveryCount].fuelUsed,
+                  &deliveries[deliveryCount].fuelCost,
+                  &deliveries[deliveryCount].totalCost,
+                  &deliveries[deliveryCount].profit,
+                  &deliveries[deliveryCount].customerCharge) == 11) {
+        deliveryCount++;
+    }
+
+    fclose(fp);
+    printf("Loaded %d deliveries from file.\n", deliveryCount);
+}
+
 
 
