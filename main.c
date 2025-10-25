@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h> // strcmp(), strcpy()
 #define MAX_CITIES 30
 #define MAX_DELIVERIES 50
 #define FUEL_PRICE 310.0
-
 #define INF 1e9
 
-//Vehicle Details
+//vehicle Details
 typedef struct
 {
     char name[10];
@@ -17,26 +16,28 @@ typedef struct
     float efficiency;
 }  Vehicle;
 
-//Delivery record structure
+//delivery details
 typedef struct
 {
-    int src, dest;           // city indexes
-    float weight;            // delivery weight
-    int vehicleType;         // vehicle index (1,2,3)
-    float distance;          // distance between cities
-    float cost;              // base transport cost
-    float fuelUsed;          // liters of fuel
-    float fuelCost;          // cost of fuel
-    float totalCost;         // cost + fuel
-    float profit;            // company profit
-    float customerCharge;    // final charge to customer
-    float time;              // estimated travel time (hours)
+    int src, dest;
+    float weight;
+    int vehicleType;
+    float distance;
+    float cost;
+    float fuelUsed;
+    float fuelCost;
+    float totalCost;
+    float profit;
+    float customerCharge;
+    float time;
 } Delivery;
 
 //Global Arrays
 char cities[MAX_CITIES][50];
 float dist[MAX_CITIES][MAX_CITIES];
 int cityCount = 0;
+Delivery deliveries[MAX_DELIVERIES];
+int deliveryCount = 0;
 
 Vehicle vehicles[3] =
 {
@@ -45,13 +46,13 @@ Vehicle vehicles[3] =
     {"Lorry", 10000, 80, 45, 4}
 };
 
- Delivery deliveries[MAX_DELIVERIES];
- int deliveryCount = 0;
-
 
 
 //function declarations
+void manageCities();
 void addCity();
+void renameCity();
+void removeCity();
 void listCities();
 void editDistance();
 void showDistanceTable();
@@ -59,23 +60,18 @@ void showVehicles();
 void addDelivery();
 void showDeliveries();
 void showReport();
-
-void renameCity();
-void removeCity();
-void manageCities();
-
 void saveDeliveries();
 void loadDeliveries();
-
 void findLeastCostRoute();
 
-
+//main menu
 int main()
 {
     int choice;
     while (1) {
-        printf("\n==== LOGISTICS MANAGEMENT SYSTEM ====\n");
-        printf("1. manegecities\n");
+        printf("Welcome to Logistics Management System by Hashintha Dilshan\n");
+        printf("------------------------------------------------------\n");
+        printf("1. Manage Cities\n");
         printf("2. Edit Distance\n");
         printf("3. Show Distance Table\n");
         printf("4. Add Delivery\n");
@@ -83,7 +79,7 @@ int main()
         printf("6. Show Report\n");
         printf("7. Save Deliveries\n");
         printf("8. Load Deliveries\n");
-        printf("9. Find Least-Cost Route\n");
+        printf("9. Find Least Cost Route\n");
         printf("0. Exit\n");
         printf("========================================\n");
         printf("Enter choice: ");
@@ -102,7 +98,7 @@ int main()
                   break;
             case 6: showReport();
                   break;
-                  case 7: saveDeliveries();
+            case 7: saveDeliveries();
                   break;
             case 8: loadDeliveries();
                   break;
@@ -111,13 +107,13 @@ int main()
             case 0:
                  return 0;
             default:
-                printf("Invalid choice!\n");
+                printf("Invalid choice! Try again.\n");
         }
     }
 
 }
 
-   //city function
+   //......city management......
 
    void manageCities() {
     int ch;
@@ -128,30 +124,24 @@ int main()
         printf("3. Remove City\n");
         printf("4. List Cities\n");
         printf("0. Back to Main Menu\n");
-        printf("Enter choice: ");
+        printf("Enter your choice: ");
         scanf("%d", &ch);
 
-        switch (ch) {
-            case 1:
-                addCity();
-             break;
-            case 2:
-                 renameCity();
-                  break;
-            case 3:
-                 removeCity();
-                  break;
-            case 4:
-                 listCities();
-                  break;
-            case 0:
-                return;
-            default:
-                 printf("Invalid choice!\n");
-        }
+        if (ch == 0)
+            break;
+        else if (ch == 1)
+            addCity();
+        else if (ch == 2)
+            renameCity();
+        else if (ch == 3)
+            removeCity();
+        else if (ch == 4)
+            listCities();
+        else
+            printf("Invalid choice!\n");
     }
 }
-
+// rename city
 void renameCity() {
     if (cityCount == 0) {
         printf("No cities available to rename!\n");
@@ -213,7 +203,7 @@ void removeCity() {
 }
 
 
-
+// add new city
 void addCity() {
     if (cityCount >= MAX_CITIES) {
         printf("City limit reached!\n");
@@ -223,7 +213,7 @@ void addCity() {
     printf("Enter city name: ");
     scanf("%s", name);
 
-    // Check for duplicates
+
     for (int i = 0; i < cityCount; i++) {
         if (strcmp(cities[i], name) == 0) {
             printf("City already exists!\n");
@@ -244,7 +234,7 @@ void listCities() {
     }
 }
 
-
+//distance edit
 void editDistance() {
     if (cityCount < 2) {
         printf("Add at least 2 cities first!\n");
@@ -271,7 +261,7 @@ void editDistance() {
 }
 
 
-
+//distance table
 void showDistanceTable() {
     if (cityCount == 0) {
         printf("No cities to show!\n");
@@ -292,7 +282,7 @@ void showDistanceTable() {
     }
 }
 
-
+//vehicle info
 void showVehicles() {
     printf("\nAvailable Vehicle\n");
     for (int i = 0; i < 3; i++) {
@@ -368,7 +358,7 @@ if (dist[d.src][d.dest] <= 0) {
     // Get distance
     d.distance = dist[d.src][d.dest];
     if (d.distance <= 0) {
-        printf("Distance not set between selected cities!\n");
+        printf("Distance not found! selected cities!\n");
         return;
     }
 
@@ -381,7 +371,6 @@ if (dist[d.src][d.dest] <= 0) {
     d.customerCharge = d.totalCost + d.profit;
     d.time = d.distance / v.speed;
 
-    // Save delivery
     deliveries[deliveryCount++] = d;
 
     //Summary output
@@ -394,18 +383,18 @@ if (dist[d.src][d.dest] <= 0) {
     printf("Total Operational Cost: %.2f LKR\n", d.totalCost);
     printf("Profit: %.2f LKR\nCustomer Charge: %.2f LKR\n", d.profit, d.customerCharge);
     printf("Estimated Time: %.2f hours\n", d.time);
-    printf("==========================\n");
+    printf("-----------------------------\n");
 }
 
 
-
+//show all delivers
 void showDeliveries() {
     if (deliveryCount == 0) {
     printf("No deliveries yet!\n");
     return;
     }
 
-  printf("\n==== ALL DELIVERIES ====\n");
+  printf("\n ALL DELIVERIES:\n");
     for (int i = 0; i < deliveryCount; i++) {
       Delivery d = deliveries[i];
       printf("\nDelivery #%d\n", i + 1);
@@ -417,7 +406,7 @@ void showDeliveries() {
     printf("========================\n");
 }
 
-
+//report function
 void showReport() {
 
 if (deliveryCount == 0) {
@@ -489,7 +478,7 @@ void loadDeliveries() {
 }
 
 
-
+//shortest path
 void findLeastCostRoute() {
     if (cityCount < 2) {
         printf("Add at least 2 cities first!\n");
