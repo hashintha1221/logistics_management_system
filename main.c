@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // strcmp(), strcpy()
+
+
 #define MAX_CITIES 30
 #define MAX_DELIVERIES 50
 #define FUEL_PRICE 310.0
@@ -62,11 +64,17 @@ void showDeliveries();
 void showReport();
 void saveDeliveries();
 void loadDeliveries();
+void loadRoutes();
+void loadDeliveries();
 void findLeastCostRoute();
 
 //main menu
 int main()
 {
+    loadRoutes();
+    loadDeliveries();
+
+
     int choice;
     while (1) {
         printf("Welcome to Logistics Management System by Hashintha Dilshan\n");
@@ -77,9 +85,7 @@ int main()
         printf("4. Add Delivery\n");
         printf("5. Show Deliveries\n");
         printf("6. Show Report\n");
-        printf("7. Save Deliveries\n");
-        printf("8. Load Deliveries\n");
-        printf("9. Find Least Cost Route\n");
+        printf("7. Find Least Cost Route\n");
         printf("0. Exit\n");
         printf("========================================\n");
         printf("Enter choice: ");
@@ -98,14 +104,14 @@ int main()
                   break;
             case 6: showReport();
                   break;
-            case 7: saveDeliveries();
-                  break;
-            case 8: loadDeliveries();
-                  break;
-            case 9: findLeastCostRoute();
+
+            case 7: findLeastCostRoute();
                    break;
             case 0:
-                 return 0;
+                saveRoutes();
+                saveDeliveries();
+                printf("All data saved. Exiting...\n");
+                return 0;
             default:
                 printf("Invalid choice! Try again.\n");
         }
@@ -476,6 +482,40 @@ void loadDeliveries() {
     fclose(fp);
     printf("Loaded %d deliveries from file.\n", deliveryCount);
 }
+
+
+void saveRoutes() {
+    FILE *fp = fopen("routes.txt", "w");
+    if (!fp) return;
+
+    fprintf(fp, "%d\n", cityCount);
+    for (int i = 0; i < cityCount; i++)
+        fprintf(fp, "%s\n", cities[i]);
+
+    for (int i = 0; i < cityCount; i++) {
+        for (int j = 0; j < cityCount; j++)
+            fprintf(fp, "%.1f ", dist[i][j]);
+        fprintf(fp, "\n");
+    }
+    fclose(fp);
+}
+
+void loadRoutes() {
+    FILE *fp = fopen("routes.txt", "r");
+    if (!fp) return;
+
+    fscanf(fp, "%d", &cityCount);
+    for (int i = 0; i < cityCount; i++)
+        fscanf(fp, "%s", cities[i]);
+
+    for (int i = 0; i < cityCount; i++)
+        for (int j = 0; j < cityCount; j++)
+            fscanf(fp, "%f", &dist[i][j]);
+    fclose(fp);
+}
+
+
+
 
 
 //shortest path
